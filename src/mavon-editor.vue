@@ -442,6 +442,7 @@ export default {
       textarea_selectionEnd: 0,
       textarea_selectionEnds: [0],
       _xssHandler: null,
+      blurTimeout: null,
     };
   },
   created() {
@@ -472,10 +473,13 @@ export default {
       this.getTextareaDom().focus();
     }
     this.getTextareaDom().addEventListener("focus", () => {
+      clearTimeout(this.blurTimeout);
       this.$emit("focus");
     });
     this.getTextareaDom().addEventListener("blur", () => {
-      this.$emit("blur");
+      this.blurTimeout = setTimeout(() => {
+        this.$emit("blur");
+      }, 200);
     });
     // fullscreen事件
     fullscreenchange(this);
