@@ -75,6 +75,7 @@
         :value="'asd\nasd\nasd'"
         @focus="onFocus"
         @blur="onBlur"
+        defaultOpen="edit"
       >
         <!-- <template slot="left-toolbar-before">
           
@@ -156,6 +157,7 @@ export default {
                 ul: true,
                 preview: true,
                 help: true,
+                link: true,
             },
             autofocus: true,
             subfield: true,

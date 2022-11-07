@@ -64,7 +64,11 @@ export function initMarkdown() {
     };
     markdown.renderer.rules.link_open = function (tokens, idx, options, env, self) {
         var hIndex = tokens[idx].attrIndex('href');
-        if (tokens[idx].attrs[hIndex][1].startsWith('#')) return defaultRender(tokens, idx, options, env, self);
+        var href = tokens[idx].attrs[hIndex][1];
+        if (href.startsWith('#')) return defaultRender(tokens, idx, options, env, self);
+        if (!href.match(/^(https:|http:)?\/\//)) {
+            tokens[idx].attrs[hIndex][1] = '//' + href;
+        }
         // If you are sure other plugins can't add `target` - drop check below
         var aIndex = tokens[idx].attrIndex('target');
 
@@ -73,6 +77,8 @@ export function initMarkdown() {
         } else {
             tokens[idx].attrs[aIndex][1] = '_blank';    // replace value of existing attr
         }
+
+        console.log('href', tokens[idx].attrIndex('href'));
 
         // pass token to default renderer.
         return defaultRender(tokens, idx, options, env, self);
@@ -129,6 +135,7 @@ export default {
             missLangs = {};
             needLangs = [];
             var res = this.markdownIt.render(src);
+            console.log(res);
             if (this.ishljs) {
                 if (needLangs.length > 0) {
                     $vm.$_render(src, func, res);
