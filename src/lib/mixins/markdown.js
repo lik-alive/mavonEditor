@@ -16,6 +16,7 @@ var markdown_config = {
 
 var MarkdownIt = require('markdown-it');
 // 表情
+var emoji = require('markdown-it-emoji');
 // 下标
 var sub = require('markdown-it-sub')
 // 上标
@@ -27,7 +28,7 @@ var abbr = require('markdown-it-abbr')
 // footnote
 var footnote = require('markdown-it-footnote')
 // insert 带有下划线 样式 ++ ++
-// var insert = require('markdown-it-ins')
+var insert = require('markdown-it-ins')
 // mark
 var mark = require('markdown-it-mark')
 // taskLists
@@ -107,6 +108,7 @@ export default {
         if (this.extensions.mark) this.markdownIt.use(mark);
         if (this.extensions.footnote) this.markdownIt.use(footnote);
         if (this.extensions.taskLists) this.markdownIt.use(taskLists);
+        if (this.extensions.emoji) this.markdownIt.use(emoji);
         if (this.extensions.katex) this.markdownIt.use(katex);
         if (this.extensions.miip) this.markdownIt.use(miip);
         if (this.extensions.toc) this.markdownIt.use(toc);
