@@ -42,6 +42,7 @@
           </select>
         </div>
       </div>
+
       <mavon-editor
         ref="md"
         :subfield="subfield"
@@ -53,7 +54,6 @@
         @save="saveone"
         :ishljs="true"
         class="item-editor"
-        v-model="help1"
         :autofocus="autofocus"
         :shortCut="true"
         :externalLink="external_link"
@@ -70,15 +70,26 @@
         toolbars-background="#ffffff"
         preview-background="#fbfbfb"
         :extensions="{ insert: true }"
+        :toolbars="toolbars"
+        :customHelp="true"
+        @helpToggle="helpToggle"
+        :value="'asd\nasd\nasd'"
+        defaultOpen="preview"
       >
         <!-- <template slot="left-toolbar-before">
-                    左工具栏前
-                </template>
-                <template slot="left-toolbar-after">
-                    左工具栏后
-                </template>
+          
+        </template> -->
 
-                <template slot="right-toolbar-before">
+        <template slot="left-toolbar-after">
+          <button
+            type="button"
+            @click="testClick"
+            class="op-icon fa fa-mavon-link"
+            title="custom"
+          ></button>
+        </template>
+
+        <!-- <template slot="right-toolbar-before">
                     右工具栏前
                 </template>
                 <template slot="right-toolbar-after">
@@ -126,10 +137,10 @@
 
 <script type="text/ecmascript-6">
 import styles from '../lib/core/hljs/lang.hljs.css.js'
-import {CONFIG} from '../lib/config.js'
+import { CONFIG } from '../lib/config.js'
 export default {
     name: 'app',
-    data () {
+    data() {
         return {
             d_language: 'ru',
             help1: '',
@@ -137,38 +148,37 @@ export default {
             d_words: {},
             screen_phone: false,
             toolbars: {
-                underline: true, // 下划线
-                strikethrough: true, // 中划线
-                alignCenter: true, // 中划线
-                undo: true,
-                save: true,
-                fullscreen: true, // 全屏编辑
-                navigation: true,
+                bold: true,
+                italic: true,
+                header: true,
+                quote: true,
+                ol: true,
+                ul: true,
                 preview: true,
-                subfield: false
+                help: true,
             },
             autofocus: true,
-            subfield: true,
+            subfield: false,
             editable: true,
             toolbarsFlag: true,
             img_file: {},
             external_link: {
-                markdown_css: function() {
+                markdown_css: function () {
                     return '/markdown/github-markdown.min.css';
                 },
-                hljs_js: function() {
+                hljs_js: function () {
                     return '/highlightjs/highlight.min.js';
                 },
-                hljs_css: function(css) {
+                hljs_css: function (css) {
                     return '/highlightjs/styles/' + css + '.min.css';
                 },
-                hljs_lang: function(lang) {
+                hljs_lang: function (lang) {
                     return '/highlightjs/languages/' + lang + '.min.js';
                 },
-                katex_css: function() {
+                katex_css: function () {
                     return '/katex/katex.min.css';
                 },
-                katex_js: function() {
+                katex_js: function () {
                     return '/katex/katex.min.js';
                 }
             },
@@ -197,7 +207,7 @@ export default {
                 /* 1.4.2 */
                 navigation: true // 导航目录
             },
-            image_filter: function($files) {
+            image_filter: function ($files) {
                 console.log('image_filter files:', $files);
                 // console.log('here for you', $files);
                 return true;
@@ -210,11 +220,11 @@ export default {
             styles
         }
     },
-    created () {
+    created() {
         var $vm = this;
         this.initLanguage();
         this.sizeToStatus()
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             // 媒介查询
             $vm.sizeToStatus()
         })
@@ -228,6 +238,20 @@ export default {
         // console.log(toolbar_left)
     },
     methods: {
+        testClick() {
+            const $vm = this.$refs.md;
+
+            let insert_text = {
+                prefix: `[Yandex](`,
+                subfix: ')',
+                str: 'www.ya.ru'
+            };
+            $vm.insertText($vm.getTextareaDom(), insert_text);
+        },
+        helpToggle(status, value) {
+            console.log(status, value);
+            return false;
+        },
         clearCache() {
             this.$refs.md.$emptyHistory()
         },
@@ -235,7 +259,6 @@ export default {
             console.log(val);
         },
         imgreplace($e) {
-            console.log('here');
             this.$refs.md.$imglst2Url([
                 [0, 'https://raw.githubusercontent.com/hinesboy/mavonEditor/master/img/cn/cn-common.png'],
                 [1, 'https://raw.githubusercontent.com/hinesboy/mavonEditor/master/img/cn/cn-common.png']
@@ -274,7 +297,7 @@ export default {
             console.log('imgDel', pos);
             delete this.img_file[pos];
         },
-        sizeToStatus () {
+        sizeToStatus() {
             if (window.matchMedia('(min-width:768px)').matches) {
                 // > 768
                 this.screen_phone = false
@@ -283,16 +306,16 @@ export default {
                 this.screen_phone = true
             }
         },
-        saveone (val, render) {
+        saveone(val, render) {
             alert('save one')
         },
-        savetwo (val, render) {
+        savetwo(val, render) {
             alert('save two')
         },
-        change (val, render) {
+        change(val, render) {
             // console.log(val)
         },
-        opchange (event) {
+        opchange(event) {
             this.d_language = event.target.value;
         },
         initLanguage() {
@@ -300,10 +323,10 @@ export default {
             this.help1 = CONFIG[`help_${this.d_language}`]
             this.help2 = CONFIG[`help_${this.d_language}`]
         },
-        $subfieldtoggle(flag , value) {
+        $subfieldtoggle(flag, value) {
             console.log('sufield toggle' + flag)
         },
-        $previewtoggle(flag , value) {
+        $previewtoggle(flag, value) {
             console.log('preview toggle' + flag)
         },
         imgdelete() {

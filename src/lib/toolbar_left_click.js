@@ -10,6 +10,7 @@
  */
 
 function $toolbar_left_undo_click($vm) {
+    clearTimeout($vm.currentTimeout);
     if ($vm.d_history_index > 0) {
         $vm.d_history_index--
     }
@@ -24,6 +25,7 @@ function $toolbar_left_undo_click($vm) {
 }
 // redo
 function $toolbar_left_redo_click($vm) {
+    clearTimeout($vm.currentTimeout);
     if ($vm.d_history_index < $vm.d_history.length - 1) {
         $vm.d_history_index++
     }
@@ -50,6 +52,19 @@ function $toolbar_left_ol_click($vm) {
 // ul
 function $toolbar_left_ul_click($vm) {
     $vm.insertUl()
+}
+// quote
+function $toolbar_left_quote_click($vm) {
+    $vm.insertQuote()
+}
+function $toolbar_left_header1_click($vm) {
+    $vm.insertHeader(1)
+}
+function $toolbar_left_header2_click($vm) {
+    $vm.insertHeader(2)
+}
+function $toolbar_left_header3_click($vm) {
+    $vm.insertHeader(3)
 }
 function $toolbar_left_remove_line_click($vm) {
     $vm.removeLine()
@@ -80,41 +95,6 @@ export const toolbar_left_click = (_type, $vm) => {
              subfix: '*',
              str: $vm.d_words.tl_italic
          },
-         'header': {
-             prefix: '# ',
-             subfix: '',
-             str: $vm.d_words.tl_header
-         },
-         'header1': {
-             prefix: '# ',
-             subfix: '',
-             str: $vm.d_words.tl_header_one
-         },
-         'header2': {
-             prefix: '## ',
-             subfix: '',
-             str: $vm.d_words.tl_header_two
-         },
-         'header3': {
-             prefix: '### ',
-             subfix: '',
-             str: $vm.d_words.tl_header_three
-         },
-         'header4': {
-             prefix: '#### ',
-             subfix: '',
-             str: $vm.d_words.tl_header_four
-         },
-         'header5': {
-             prefix: '##### ',
-             subfix: '',
-             str: $vm.d_words.tl_header_five
-         },
-         'header6': {
-             prefix: '###### ',
-             subfix: '',
-             str: $vm.d_words.tl_header_six
-         },
          'underline': {
              prefix: '++',
              subfix: '++',
@@ -139,11 +119,6 @@ export const toolbar_left_click = (_type, $vm) => {
              prefix: '~',
              subfix: '~',
              str: $vm.d_words.tl_subscript
-         },
-         'quote': {
-             prefix: '> ',
-             subfix: '',
-             str: $vm.d_words.tl_quote
          },
          'link': {
              prefix: '[](',
@@ -188,6 +163,10 @@ export const toolbar_left_click = (_type, $vm) => {
          'save': $toolbar_left_save_click,
          'ol': $toolbar_left_ol_click,
          'ul': $toolbar_left_ul_click,
+         'quote': $toolbar_left_quote_click,
+         'header1': $toolbar_left_header1_click,
+         'header2': $toolbar_left_header2_click,
+         'header3': $toolbar_left_header3_click,
          'removeLine': $toolbar_left_remove_line_click,
          'code': $toolbar_left_codeBlock_click
      };

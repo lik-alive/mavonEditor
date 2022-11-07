@@ -15,7 +15,7 @@
 /**
  * textarea 插入内容
  */
-export const insertTextAtCaret = (obj, {prefix, subfix, str, type}, $vm) => {
+export const insertTextAtCaret = (obj, { prefix, subfix, str, type }, $vm) => {
     obj.focus()
     if (isExistSelectionObj(obj)) {
         var startPos = obj.selectionStart;
@@ -59,7 +59,7 @@ export const insertCodeBlock = ($vm) => {
     let obj = $vm.getTextareaDom();
 
     if (isExistSelectionObj(obj)) {
-        const {defaultLanguageText: language} = code_structure;
+        const { defaultLanguageText: language } = code_structure;
         let { selectionStart: startPos, selectionEnd: endPos, value: tmpStr } = obj;
 
         if (startPos === endPos) {
@@ -87,7 +87,7 @@ export const insertCodeBlock = ($vm) => {
 }
 
 function insertCodeBlockToVM(language, content, selectionObj) {
-    const {prefix, subfix} = code_structure;
+    const { prefix, subfix } = code_structure;
     let { selectionStart: startPos, selectionEnd: endPos, value: tmpStr } = selectionObj;
 
     let value = tmpStr.substring(0, startPos);
@@ -98,20 +98,19 @@ function insertCodeBlockToVM(language, content, selectionObj) {
 
     selectionObj.value = value;
     selectionObj.selectionStart = startPos + prefix.length + (language ? 0 : 1);
-    selectionObj.selectionEnd = selectionObj.selectionStart + language.length +  content.length;
+    selectionObj.selectionEnd = selectionObj.selectionStart + language.length + content.length;
 }
 
 function removeCodeBlockFromVM(selectionObj) {
-    let {prefix, subfix, defaultLanguageText: language} = code_structure;
+    let { prefix, subfix, defaultLanguageText: language } = code_structure;
     let { selectionStart: startPos, selectionEnd: endPos, value: content } = selectionObj;
     let selectedValue = content.substring(startPos, endPos);
 
-    if (content.substring(startPos - 1, startPos) === "\n")
-    {
+    if (content.substring(startPos - 1, startPos) === "\n") {
         prefix = prefix + "\n";
     } else {
         subfix = "\n" + subfix;
-        if (prefix + language + subfix === content.substring(startPos - prefix.length,endPos + subfix.length)) {
+        if (prefix + language + subfix === content.substring(startPos - prefix.length, endPos + subfix.length)) {
             let value = content.substring(0, startPos - prefix.length);
             value += content.substring(endPos + subfix.length, content.length)
 
@@ -137,22 +136,21 @@ function isExistSelectionObj(textareaDom) {
 
 function isCancelCodeBlock(selectionObj) {
     let { selectionStart: startPos, selectionEnd: endPos, value: content } = selectionObj;
-    let {prefix, subfix} = code_structure;
+    let { prefix, subfix } = code_structure;
 
-    if (content.substring(startPos - 1, startPos) === "\n")
-    {
+    if (content.substring(startPos - 1, startPos) === "\n") {
         prefix = prefix + "\n";
     } else {
         subfix = "\n" + subfix;
     }
 
     return content.substring(startPos - prefix.length, startPos) === prefix &&
-                content.substring(endPos, endPos + subfix.length) === subfix;
+        content.substring(endPos, endPos + subfix.length) === subfix;
 }
 
 // 处理粗体与斜体冲突问题
 function judgeItalicAndBold(prefix, subfix, tmpStr, startPos, endPos) {
-    if (prefix === '*' && subfix ===  '*') {
+    if (prefix === '*' && subfix === '*') {
         if (tmpStr.substring(startPos - 2, startPos - 1) === '*' && tmpStr.substring(endPos + 1, endPos + 2) === '*') {
             return false
         }
@@ -168,8 +166,9 @@ export const insertOl = ($vm) => {
         var tmpStr = obj.value;
         if (startPos === endPos) {
             // 直接插入
-            obj.value = tmpStr.substring(0, startPos) + '1. ' + tmpStr.substring(endPos, tmpStr.length);
-            obj.selectionEnd = obj.selectionStart = startPos + 3;
+            var newLinePos = tmpStr.lastIndexOf("\n", startPos - 1) + 1;
+            obj.value = tmpStr.substring(0, newLinePos) + '1. ' + tmpStr.substring(newLinePos, tmpStr.length);
+            obj.selectionEnd = obj.selectionStart = newLinePos + 3;
         } else {
             // 存在选中区域
             let start = startPos
@@ -194,6 +193,60 @@ export const insertOl = ($vm) => {
     $vm.d_value = obj.value
     obj.focus();
 }
+
+export const insertQuote = ($vm) => {
+    let obj = $vm.getTextareaDom();
+    if (isExistSelectionObj(obj)) {
+        var startPos = obj.selectionStart;
+        var endPos = obj.selectionEnd;
+        var tmpStr = obj.value;
+        if (startPos === endPos) {
+            var newLinePos = tmpStr.lastIndexOf("\n", startPos - 1) + 1;
+            obj.value = tmpStr.substring(0, newLinePos) + '> ' + tmpStr.substring(newLinePos, tmpStr.length);
+            obj.selectionEnd = obj.selectionStart = newLinePos + 2;
+        } else {
+            // 存在选中区域
+            let start = startPos
+            while (start > 0 && tmpStr.substring(start - 1, start) !== '\n') {
+                start--
+            }
+            let selectStr = tmpStr.substring(start, endPos)
+            let selectStrs = selectStr.split('\n')
+            for (let i = 0; i < selectStrs.length; i++) {
+                selectStrs[i] = '> ' + selectStrs[i]
+            }
+            let newSelectStr = selectStrs.join('\n')
+            obj.value = tmpStr.substring(0, start) + newSelectStr + tmpStr.substring(endPos, tmpStr.length);
+            obj.selectionStart = start
+            obj.selectionEnd = endPos + newSelectStr.length - selectStr.length;
+        }
+    } else {
+        alert('Error: Browser version is too low')
+        // obj.value += str;
+    }
+    // 触发change事件
+    $vm.d_value = obj.value
+    obj.focus();
+}
+
+export const insertHeader = ($vm, level) => {
+    let obj = $vm.getTextareaDom();
+    if (isExistSelectionObj(obj)) {
+        var startPos = obj.selectionStart;
+        var tmpStr = obj.value;
+        var prefix = '#'.repeat(level);
+        var newLinePos = tmpStr.lastIndexOf("\n", startPos - 1) + 1;
+        obj.value = tmpStr.substring(0, newLinePos) + prefix + ' ' + tmpStr.substring(newLinePos, tmpStr.length).replace(/^#+ /, '');
+        obj.selectionEnd = obj.selectionStart = newLinePos + level + 1;
+    } else {
+        alert('Error: Browser version is too low')
+        // obj.value += str;
+    }
+    // 触发change事件
+    $vm.d_value = obj.value
+    obj.focus();
+}
+
 // 删除行
 export const removeLine = ($vm) => {
     let obj = $vm.getTextareaDom();
@@ -213,7 +266,7 @@ export const removeLine = ($vm) => {
         if (end < tmpStr.length) {
             end++
         }
-        obj.value = tmpStr.substring(0, start)  + tmpStr.substring(end, tmpStr.length);
+        obj.value = tmpStr.substring(0, start) + tmpStr.substring(end, tmpStr.length);
         obj.selectionEnd = obj.selectionStart = start === 0 ? 0 : start - 1;
     } else {
         alert('Error: Browser version is too low')
@@ -232,7 +285,8 @@ export const insertUl = ($vm) => {
         var tmpStr = obj.value;
         if (startPos === endPos) {
             // 直接插入
-            obj.value = tmpStr.substring(0, startPos) + '- ' + tmpStr.substring(endPos, tmpStr.length);
+            var newLinePos = tmpStr.lastIndexOf("\n", startPos - 1) + 1;
+            obj.value = tmpStr.substring(0, newLinePos) + '- ' + tmpStr.substring(newLinePos, tmpStr.length);
             obj.selectionEnd = obj.selectionStart = startPos + 2;
         } else {
             // 存在选中区域
@@ -295,7 +349,7 @@ export const unInsertTab = ($vm, tab) => {
         let lastLine = tmpStr.substring(0, startPos).split('\n').pop()
         if (lastLine.search(regTab) >= 0) {
             // 替换最后一个制表符为空
-            obj.value = tmpStr.substring(0, startPos - lastLine.length) +  lastLine.replace(regTab, '') + tmpStr.substring(endPos, tmpStr.length);
+            obj.value = tmpStr.substring(0, startPos - lastLine.length) + lastLine.replace(regTab, '') + tmpStr.substring(endPos, tmpStr.length);
             obj.selectionStart = obj.selectionEnd = startPos - (tab || 1);
         }
     } else {
@@ -351,7 +405,7 @@ export const insertEnter = ($vm, event) => {
 /**
  * 生成导航目录
  */
-export const getNavigation = ($vm , full) => {
+export const getNavigation = ($vm, full) => {
     let navigationContent;
 
     navigationContent = $vm.$refs.navigationContent
@@ -360,10 +414,10 @@ export const getNavigation = ($vm , full) => {
     let nodes = navigationContent.children
     if (nodes.length) {
         for (let i = 0; i < nodes.length; i++) {
-            judageH(nodes[i] , i , nodes)
+            judageH(nodes[i], i, nodes)
         }
     }
-    function judageH(node , i , nodes) {
+    function judageH(node, i, nodes) {
         let reg = /^H[1-6]{1}$/;
         if (!reg.exec(node.tagName)) {
             node.style.display = 'none'
@@ -452,11 +506,11 @@ export const windowResize = ($vm) => {
 
 export function loadScript(src, callback) {
     if (!(typeof callback === 'function')) {
-        callback = function() {};
+        callback = function () { };
     }
     var check = document.querySelectorAll("script[src='" + src + "']");
     if (check.length > 0) {
-        check[0].addEventListener('load', function() {
+        check[0].addEventListener('load', function () {
             callback();
         });
         callback();
@@ -485,7 +539,7 @@ export function loadScript(src, callback) {
 // <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/agate.min.css" rel="stylesheet">
 export function loadLink(src, callback, id) {
     if (!(typeof callback === 'function')) {
-        callback = function() {};
+        callback = function () { };
     }
     var check = document.querySelectorAll("link[href='" + src + "']");
     if (check.length > 0) {

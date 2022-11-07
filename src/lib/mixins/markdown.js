@@ -108,7 +108,6 @@ export default {
         if (this.extensions.mark) this.markdownIt.use(mark);
         if (this.extensions.footnote) this.markdownIt.use(footnote);
         if (this.extensions.taskLists) this.markdownIt.use(taskLists);
-        console.log('ext', this.extensions);
         if (this.extensions.emoji) this.markdownIt.use(emoji);
         if (this.extensions.katex) this.markdownIt.use(katex);
         if (this.extensions.miip) this.markdownIt.use(miip);

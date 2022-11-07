@@ -15,9 +15,6 @@
                     <div title="#"  class="dropdown-item" @click.stop="$click_header('header1')"><span>{{d_words.tl_header_one}}</span></div>
                     <div title="## " class="dropdown-item" @click.stop="$click_header('header2')"><span>{{d_words.tl_header_two}}</span></div>
                     <div title="### " class="dropdown-item" @click.stop="$click_header('header3')"><span>{{d_words.tl_header_three}}</span></div>
-                    <div title="#### " class="dropdown-item" @click.stop="$click_header('header4')"><span>{{d_words.tl_header_four}}</span></div>
-                    <div title="##### " class="dropdown-item" @click.stop="$click_header('header5')"><span>{{d_words.tl_header_five}}</span></div>
-                    <div title="###### " class="dropdown-item" @click.stop="$click_header('header6')"><span>{{d_words.tl_header_six}}</span></div>
                 </div>
             </transition>
         </div>
@@ -294,7 +291,7 @@
                 let vm = this
                 this.header_timer = setTimeout(function() {
                     vm.s_header_dropdown_open = false
-                },200)
+                },500)
             },
             $clicks(_type) {
                 // 让父节点来绑定事件并
