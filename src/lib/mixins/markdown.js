@@ -16,7 +16,6 @@ var markdown_config = {
 
 var MarkdownIt = require('markdown-it');
 // 表情
-var emoji = require('markdown-it-emoji');
 // 下标
 var sub = require('markdown-it-sub')
 // 上标
@@ -102,13 +101,12 @@ export default {
             this.markdownIt.use(container, 'hljs-center');
             this.markdownIt.use(container, 'hljs-right');
         }
-        // if (this.extensions.insert) this.markdownIt.use(insert);
+        if (this.extensions.insert) this.markdownIt.use(insert);
         if (this.extensions.deflist) this.markdownIt.use(deflist);
         if (this.extensions.abbr) this.markdownIt.use(abbr);
         if (this.extensions.mark) this.markdownIt.use(mark);
         if (this.extensions.footnote) this.markdownIt.use(footnote);
         if (this.extensions.taskLists) this.markdownIt.use(taskLists);
-        if (this.extensions.emoji) this.markdownIt.use(emoji);
         if (this.extensions.katex) this.markdownIt.use(katex);
         if (this.extensions.miip) this.markdownIt.use(miip);
         if (this.extensions.toc) this.markdownIt.use(toc);
