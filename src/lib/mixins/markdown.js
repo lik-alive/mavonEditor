@@ -35,7 +35,7 @@ var mark = require('markdown-it-mark')
 var taskLists = require('markdown-it-task-lists')
 // container
 var container = require('markdown-it-container')
-//
+// table of content
 var toc = require('markdown-it-toc')
 
 var mihe = require('markdown-it-highlightjs-external');
@@ -78,25 +78,6 @@ export function initMarkdown() {
         return defaultRender(tokens, idx, options, env, self);
     };
 
-    markdown.use(mihe, hljs_opts)
-        .use(emoji)
-        .use(sup)
-        .use(sub)
-        .use(container)
-        .use(container, 'hljs-left') /* align left */
-        .use(container, 'hljs-center')/* align center */
-        .use(container, 'hljs-right')/* align right */
-        .use(deflist)
-        .use(abbr)
-        .use(footnote)
-        .use(insert)
-        .use(mark)
-        .use(container)
-        .use(miip)
-        .use(katex)
-        .use(taskLists)
-        .use(toc)
-
     return markdown;
 }
 
@@ -108,9 +89,33 @@ export default {
     },
     created() {
         this.markdownIt = initMarkdown();
+
+        // Enable extensions
+        if (this.extensions.highlight) this.markdownIt.use(mihe, hljs_opts);
+        if (this.extensions.subsup) {
+            this.markdownIt.use(sub);
+            this.markdownIt.use(sup);
+        }
+        if (this.extensions.container) {
+            this.markdownIt.use(container);
+            this.markdownIt.use(container, 'hljs-left');
+            this.markdownIt.use(container, 'hljs-center');
+            this.markdownIt.use(container, 'hljs-right');
+        }
+        if (this.extensions.insert) this.markdownIt.use(insert);
+        if (this.extensions.deflist) this.markdownIt.use(deflist);
+        if (this.extensions.abbr) this.markdownIt.use(abbr);
+        if (this.extensions.mark) this.markdownIt.use(mark);
+        if (this.extensions.footnote) this.markdownIt.use(footnote);
+        if (this.extensions.taskLists) this.markdownIt.use(taskLists);
+        if (this.extensions.emoji) this.markdownIt.use(emoji);
+        if (this.extensions.katex) this.markdownIt.use(katex);
+        if (this.extensions.miip) this.markdownIt.use(miip);
+        if (this.extensions.toc) this.markdownIt.use(toc);
+
         if (!this.html) {
             this.markdownIt.set({ html: false });
-            this.xssOptions = false;
+            this.markdownIt.set({ xssOptions: false });
         } else if (typeof this.xssOptions === 'object') {
             this.markdownIt.use(sanitizer, this.xssOptions);
         }

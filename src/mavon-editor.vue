@@ -239,6 +239,10 @@ export default {
         shortCut:{
             type: Boolean,
             default: true
+        },
+        extensions: {
+            type: Object,
+            default: () => { return CONFIG.extensions }
         }
     },
     data() {

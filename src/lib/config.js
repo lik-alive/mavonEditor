@@ -75,5 +75,20 @@ export const CONFIG = {
         'htmlcode': true,
         'help': true,
         'preview': true
+    },
+    'extensions': {
+        'highlight': true,
+        'subsup': true,
+        'container': true,
+        'insert': true,
+        'deflist': true,
+        'abbr': true,
+        'mark': true,
+        'footnote': true,
+        'taskLists': true,
+        'emoji': true,
+        'katex': true,
+        'miip': true,
+        'toc': true
     }
 };
