@@ -69,7 +69,6 @@
         box-shadow-style="0 2px 12px 0 rgba(0, 0, 0, 0.1)"
         toolbars-background="#ffffff"
         preview-background="#fbfbfb"
-        language="ru"
         :extensions="{ insert: true }"
       >
         <!-- <template slot="left-toolbar-before">
@@ -132,7 +131,7 @@ export default {
     name: 'app',
     data () {
         return {
-            d_language: 'zh-CN',
+            d_language: 'ru',
             help1: '',
             help2: '',
             d_words: {},
