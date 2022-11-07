@@ -479,7 +479,7 @@ export default {
     this.getTextareaDom().addEventListener("blur", () => {
       this.blurTimeout = setTimeout(() => {
         this.$emit("blur");
-      }, 200);
+      }, 100);
     });
     // fullscreen事件
     fullscreenchange(this);
