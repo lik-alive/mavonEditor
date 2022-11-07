@@ -11,7 +11,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
     line-height: 1.5;
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .markdown-body .pl-c {
@@ -612,15 +612,10 @@
     content: "\00a0";
 }
 
-.markdown-body pre {
-    word-wrap: normal;
-}
-
 .markdown-body pre > code {
     padding: 0;
     margin: 0;
     font-size: 100%;
-    word-break: normal;
     white-space: pre;
     background: transparent;
     border: 0;
@@ -632,7 +627,6 @@
 
 .markdown-body .highlight pre {
     margin-bottom: 0;
-    word-break: break-word;
 }
 
 .markdown-body .highlight pre,
@@ -651,7 +645,7 @@
     margin: 0;
     overflow: visible;
     line-height: inherit;
-    word-wrap: normal;
+    overflow-wrap: normal;
     background-color: transparent;
     border: 0;
 }
