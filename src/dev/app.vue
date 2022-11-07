@@ -69,7 +69,7 @@
         box-shadow-style="0 2px 12px 0 rgba(0, 0, 0, 0.1)"
         toolbars-background="#ffffff"
         preview-background="#fbfbfb"
-        :extensions="{ insert: true }"
+        :extensions="{ insert: true, toc: true }"
         :toolbars="toolbars"
         @helpToggle="helpToggle"
         :value="'asd\nasd\nasd'"
