@@ -75,8 +75,6 @@
             v-model="d_value"
             fullHeight
             :style="{ 'background-color': editorBackground }"
-            @focus="$emit('focus')"
-            @blur="$emit('blur')"
           ></v-autoTextarea>
         </div>
       </div>
@@ -473,6 +471,12 @@ export default {
     if (this.autofocus) {
       this.getTextareaDom().focus();
     }
+    this.getTextareaDom().addEventListener("focus", () => {
+      this.$emit("focus");
+    });
+    this.getTextareaDom().addEventListener("blur", () => {
+      this.$emit("blur");
+    });
     // fullscreen事件
     fullscreenchange(this);
     this.d_value = this.value || "";

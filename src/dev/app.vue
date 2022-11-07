@@ -71,22 +71,23 @@
         preview-background="#fbfbfb"
         :extensions="{ insert: true }"
         :toolbars="toolbars"
-        :customHelp="true"
         @helpToggle="helpToggle"
         :value="'asd\nasd\nasd'"
+        @focus="onFocus"
+        @blur="onBlur"
       >
         <!-- <template slot="left-toolbar-before">
           
         </template> -->
 
-        <template slot="left-toolbar-after">
+        <!-- <template slot="left-toolbar-after">
           <button
             type="button"
             @click="testClick"
             class="op-icon fa fa-mavon-link"
             title="custom"
           ></button>
-        </template>
+        </template> -->
 
         <!-- <template slot="right-toolbar-before">
                     右工具栏前
@@ -229,14 +230,16 @@ export default {
         })
     },
     mounted() {
-        var md = this.$refs.md;
-        var toolbar_left = md.$refs.toolbar_left;
-        var diy = this.$refs.diy;
-        toolbar_left.$el.append(diy)
         // toolbar_left.$el.append(diy.$el)
         // console.log(toolbar_left)
     },
     methods: {
+        onFocus() {
+            console.log('onFocus');
+        },
+        onBlur() {
+            console.log('onBlur');
+        },
         testClick() {
             const $vm = this.$refs.md;
 
