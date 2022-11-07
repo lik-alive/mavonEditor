@@ -75,6 +75,8 @@
             v-model="d_value"
             fullHeight
             :style="{ 'background-color': editorBackground }"
+            @focus="$emit('focus')"
+            @blur="$emit('blur')"
           ></v-autoTextarea>
         </div>
       </div>
