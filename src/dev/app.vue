@@ -74,7 +74,6 @@
         :customHelp="true"
         @helpToggle="helpToggle"
         :value="'asd\nasd\nasd'"
-        defaultOpen="preview"
       >
         <!-- <template slot="left-toolbar-before">
           
@@ -158,7 +157,7 @@ export default {
                 help: true,
             },
             autofocus: true,
-            subfield: false,
+            subfield: true,
             editable: true,
             toolbarsFlag: true,
             img_file: {},

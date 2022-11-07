@@ -47,7 +47,6 @@
     <div class="v-note-panel">
       <!--编辑区-->
       <div
-        v-show="!previewOnly"
         ref="vNoteEdit"
         @scroll="$v_edit_scroll"
         class="v-note-edit divarea-wrapper"
@@ -137,29 +136,27 @@
     </div>
     <!--帮助文档-->
 
-    <slot v-if="!customHelp">
-      <transition name="fade">
-        <div ref="help">
+    <transition name="fade">
+      <div ref="help">
+        <div
+          @click.self="toolbar_right_click('help')"
+          class="v-note-help-wrapper"
+          v-if="s_help"
+        >
           <div
-            @click.self="toolbar_right_click('help')"
-            class="v-note-help-wrapper"
-            v-if="s_help"
+            class="v-note-help-content markdown-body"
+            :class="{ shadow: boxShadow }"
           >
-            <div
-              class="v-note-help-content markdown-body"
-              :class="{ shadow: boxShadow }"
-            >
-              <i
-                @click.stop.prevent="toolbar_right_click('help')"
-                class="fa fa-mavon-times"
-                aria-hidden="true"
-              ></i>
-              <div class="scroll-style v-note-help-show" v-html="d_help"></div>
-            </div>
+            <i
+              @click.stop.prevent="toolbar_right_click('help')"
+              class="fa fa-mavon-times"
+              aria-hidden="true"
+            ></i>
+            <div class="scroll-style v-note-help-show" v-html="d_help"></div>
           </div>
         </div>
-      </transition>
-    </slot>
+      </div>
+    </transition>
     <!-- 预览图片 -->
     <transition name="fade">
       <div
@@ -274,10 +271,6 @@ export default {
       type: String,
       default: null,
     },
-    customHelp: {
-      type: Boolean,
-      default: false,
-    },
     value: {
       // 初始 value
       type: String,
@@ -364,10 +357,6 @@ export default {
     shortCut: {
       type: Boolean,
       default: true,
-    },
-    previewOnly: {
-      type: Boolean,
-      default: false,
     },
     extensions: {
       type: Object,
