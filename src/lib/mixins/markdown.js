@@ -28,7 +28,7 @@ var abbr = require('markdown-it-abbr')
 // footnote
 var footnote = require('markdown-it-footnote')
 // insert 带有下划线 样式 ++ ++
-var insert = require('markdown-it-ins')
+// var insert = require('markdown-it-ins')
 // mark
 var mark = require('markdown-it-mark')
 // taskLists
@@ -102,7 +102,7 @@ export default {
             this.markdownIt.use(container, 'hljs-center');
             this.markdownIt.use(container, 'hljs-right');
         }
-        if (this.extensions.insert) this.markdownIt.use(insert);
+        // if (this.extensions.insert) this.markdownIt.use(insert);
         if (this.extensions.deflist) this.markdownIt.use(deflist);
         if (this.extensions.abbr) this.markdownIt.use(abbr);
         if (this.extensions.mark) this.markdownIt.use(mark);
